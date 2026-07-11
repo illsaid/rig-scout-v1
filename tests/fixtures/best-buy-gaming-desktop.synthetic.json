@@ -1,0 +1,25 @@
+{
+  "sku": 1000001,
+  "name": "Example Gaming Desktop - Ryzen 9 9950X - RTX 5080 - 64GB Memory - 2TB SSD",
+  "manufacturer": "Example Systems",
+  "modelNumber": "EX-R9-5080",
+  "type": "Gaming Desktops",
+  "regularPrice": 3299.99,
+  "salePrice": 2999.99,
+  "onlineAvailability": true,
+  "url": "https://www.bestbuy.com/site/example/1000001.p",
+  "largeFrontImage": "https://images.example.test/example-gaming-desktop.jpg",
+  "shortDescription": "Synthetic product fixture for normalization tests.",
+  "details": [
+    { "name": "Processor Model", "value": "AMD Ryzen 9 9950X" },
+    { "name": "Graphics", "value": "NVIDIA GeForce RTX 5080" },
+    { "name": "GPU Video Memory (RAM)", "value": "16 gigabytes" },
+    { "name": "System Memory (RAM)", "value": "64 gigabytes" },
+    { "name": "Total Storage Capacity", "value": "2000 gigabytes" },
+    { "name": "Motherboard Chipset", "value": "AMD X870E" },
+    { "name": "Power Supply", "value": "1000W 80 Plus Gold" },
+    { "name": "CPU Cooling System", "value": "Liquid" },
+    { "name": "Form Factor", "value": "ATX Mid Tower" },
+    { "name": "Number of Memory Sticks Included", "value": "2" }
+  ]
+}
