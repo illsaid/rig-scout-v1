@@ -10,6 +10,10 @@ RigScout is a spec-first search engine for prebuilt PCs. A shopper chooses the c
 - Affiliate-ready outbound redirect layer
 - Responsive landing and results experience
 - Sample inventory clearly labeled as non-live
+- Primary-use weighting for gaming, editing, 3D, AI/ML, and general use
+- Exact, close, and worth-considering result groups
+- Upgradeability badges for case, PSU, memory configuration, and cooling
+- Shareable build-brief URLs
 
 ## Product boundary
 
