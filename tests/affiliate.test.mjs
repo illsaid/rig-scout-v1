@@ -17,3 +17,16 @@ test("preserves product parameters while replacing tracking parameters", () => {
   assert.equal(result.searchParams.get("utm_medium"), "affiliate");
   assert.equal(result.searchParams.get("utm_campaign"), "best-buy");
 });
+
+test("applies a configured merchant transformer after removing stale tracking", () => {
+  const result = new URL(
+    affiliateUrl(
+      "https://www.amazon.com/dp/example?tag=old-tag&th=1",
+      "Amazon",
+      { amazonAssociatesTag: "prebuilts-20" },
+    ),
+  );
+
+  assert.equal(result.searchParams.get("tag"), "prebuilts-20");
+  assert.equal(result.searchParams.get("th"), "1");
+});

@@ -45,6 +45,8 @@ test("server-renders validated shared brief parameters", async () => {
   );
   const validHtml = await validResponse.text();
 
+  assert.match(validHtml, /<meta name="robots" content="noindex, follow"/);
+  assert.match(validHtml, /<link rel="canonical" href="https:\/\/prebuilts\.co\/"/);
   assert.match(validHtml, /<option selected="">Gaming<\/option>/);
   assert.match(
     validHtml,
@@ -61,8 +63,38 @@ test("server-renders validated shared brief parameters", async () => {
   assert.match(invalidHtml, /<option selected="">RTX 5080<\/option>/);
 });
 
+test("publishes a constrained robots file and core-page sitemap", async () => {
+  const robotsResponse = await request("/robots.txt");
+  const robots = await robotsResponse.text();
+  assert.equal(robotsResponse.status, 200);
+  assert.match(robots, /Disallow: \/go\//);
+  assert.match(robots, /Disallow: \/api\//);
+  assert.match(robots, /Sitemap: https:\/\/prebuilts\.co\/sitemap\.xml/);
+
+  const sitemapResponse = await request("/sitemap.xml");
+  const sitemap = await sitemapResponse.text();
+  assert.equal(sitemapResponse.status, 200);
+  assert.match(sitemap, /<loc>https:\/\/prebuilts\.co<\/loc>/);
+  assert.doesNotMatch(sitemap, /<loc>[^<]*\?/);
+});
+
+test("exposes non-indexable ingestion health without requiring the retailer key", async () => {
+  const response = await request("/api/health/ingestion");
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow");
+  assert.deepEqual(await response.json(), { status: "database-unavailable" });
+});
+
 test("returns 404 for an unknown outbound listing", async () => {
   const response = await request("/go/not-a-listing");
   assert.equal(response.status, 404);
   assert.deepEqual(await response.json(), { error: "Listing not found" });
+});
+
+test("redirects known listings even when click storage is unavailable", async () => {
+  const response = await request("/go/demo-002");
+  assert.equal(response.status, 307);
+  const destination = new URL(response.headers.get("location"));
+  assert.equal(destination.searchParams.get("utm_source"), "prebuilts.co");
+  assert.equal(destination.searchParams.get("utm_campaign"), "best-buy");
 });

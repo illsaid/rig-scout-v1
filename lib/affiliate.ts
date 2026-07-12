@@ -7,7 +7,28 @@ const knownTrackingKeys = new Set([
   "irclickid",
 ]);
 
-export function affiliateUrl(canonicalUrl: string, retailer: string): string {
+export type AffiliateIdentifiers = {
+  amazonAssociatesTag?: string;
+};
+
+type MerchantTransformer = (
+  url: URL,
+  identifiers: AffiliateIdentifiers,
+) => void;
+
+const merchantTransformers: Record<string, MerchantTransformer> = {
+  amazon(url, identifiers) {
+    if (identifiers.amazonAssociatesTag) {
+      url.searchParams.set("tag", identifiers.amazonAssociatesTag);
+    }
+  },
+};
+
+export function affiliateUrl(
+  canonicalUrl: string,
+  retailer: string,
+  identifiers: AffiliateIdentifiers = {},
+): string {
   const url = new URL(canonicalUrl);
 
   for (const key of [...url.searchParams.keys()]) {
@@ -19,6 +40,8 @@ export function affiliateUrl(canonicalUrl: string, retailer: string): string {
     }
   }
 
+  merchantTransformers[retailer.toLowerCase()]?.(url, identifiers);
+
   url.searchParams.set("utm_source", "prebuilts.co");
   url.searchParams.set("utm_medium", "affiliate");
   url.searchParams.set(
@@ -27,4 +50,15 @@ export function affiliateUrl(canonicalUrl: string, retailer: string): string {
   );
 
   return url.toString();
+}
+
+export async function runtimeAffiliateIdentifiers(): Promise<AffiliateIdentifiers> {
+  try {
+    const runtime = await import("cloudflare:workers");
+    return {
+      amazonAssociatesTag: runtime.env.AMAZON_ASSOCIATES_TAG,
+    };
+  } catch {
+    return {};
+  }
 }

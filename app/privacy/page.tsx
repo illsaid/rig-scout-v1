@@ -1,6 +1,7 @@
 export const metadata = {
   title: "Privacy - Prebuilts.co",
   description: "Privacy information for Prebuilts.co.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {
@@ -26,6 +27,11 @@ export default function PrivacyPage() {
           When you follow a retailer link, that retailer receives the request
           and applies its own privacy policy. Eligible links may contain
           referral parameters used to measure purchases or site traffic.
+        </p>
+        <p>
+          Prebuilts.co records the listing, retailer, destination domain,
+          referring domain, and time of an outbound click. The application does
+          not store your IP address with this click record.
         </p>
       </section>
       <section>
