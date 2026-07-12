@@ -1,4 +1,4 @@
-/** Cloudflare Worker entry point for the vinext-starter template. */
+/** Cloudflare Worker entry point for Prebuilts.co. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { refreshBestBuy } from "../lib/ingestion/refresh";
@@ -47,7 +47,6 @@ const worker = {
   async scheduled(
     _controller: ScheduledController,
     env: Env,
-    _ctx: ExecutionContext,
   ): Promise<void> {
     if (!env.BEST_BUY_API_KEY) {
       console.warn("Best Buy refresh skipped: BEST_BUY_API_KEY is not configured");

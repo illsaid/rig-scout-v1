@@ -1,5 +1,9 @@
 import type { BestBuyProduct } from "./best-buy.ts";
-import { BEST_BUY_NORMALIZATION_VERSION, normalizeBestBuyProduct } from "./best-buy.ts";
+import {
+  BEST_BUY_NORMALIZATION_VERSION,
+  isUsableBestBuyListing,
+  normalizeBestBuyProduct,
+} from "./best-buy.ts";
 import type { RetailerBatch } from "./types.ts";
 
 const UPSERT_LISTING = `
@@ -71,9 +75,32 @@ export async function persistBestBuyBatch(
   db: D1Database,
   batch: RetailerBatch<BestBuyProduct>,
 ) {
-  const statements: D1PreparedStatement[] = [];
+  const candidates = [];
   for (const product of batch.products) {
     const listing = normalizeBestBuyProduct(product, batch.fetchedAt);
+    if (!isUsableBestBuyListing(listing)) continue;
+    const payloadJson = JSON.stringify(product);
+    candidates.push({
+      listing,
+      payloadJson,
+      hash: await payloadHash(payloadJson),
+    });
+  }
+
+  let changedCount = 0;
+  const changeChecks = candidates.map(({ listing, hash }) => db.prepare(`
+    SELECT 1 AS found
+    FROM raw_snapshots
+    WHERE retailer = ? AND retailer_sku = ? AND payload_hash = ?
+    LIMIT 1
+  `).bind(listing.retailer, listing.retailerSku, hash));
+  for (const group of chunks(changeChecks, 50)) {
+    const results = await db.batch(group);
+    changedCount += results.filter((result) => !result.results?.length).length;
+  }
+
+  const statements: D1PreparedStatement[] = [];
+  for (const { listing, payloadJson, hash } of candidates) {
     const fetchedAt = listing.fetchedAt.getTime();
     const expiresAt = listing.expiresAt.getTime();
     statements.push(db.prepare(UPSERT_LISTING).bind(
@@ -89,8 +116,6 @@ export async function persistBestBuyBatch(
       "USD", listing.available ? 1 : 0, listing.canonicalUrl, listing.imageUrl,
       listing.imageSource, listing.imageAttribution, fetchedAt, expiresAt, fetchedAt,
     ));
-    const payloadJson = JSON.stringify(product);
-    const hash = await payloadHash(payloadJson);
     statements.push(db.prepare(UPSERT_SNAPSHOT).bind(
       `${listing.id}:${hash.slice(0, 20)}`, listing.id, listing.retailer,
       listing.retailerSku, payloadJson, hash, listing.canonicalUrl,
@@ -100,7 +125,7 @@ export async function persistBestBuyBatch(
   for (const group of chunks(statements, 50)) {
     await db.batch(group);
   }
-  return batch.products.length;
+  return changedCount;
 }
 
 export async function cleanupExpiredRetailerContent(db: D1Database, now = new Date()) {

@@ -104,7 +104,8 @@ export async function loadCatalog(): Promise<{
     `).bind(Date.now()).all<ListingRow>();
     if (!result.results.length) return { listings: catalog, source: "sample" };
     return { listings: result.results.map(fromRow), source: "live" };
-  } catch {
+  } catch (error) {
+    console.error("Unable to load the live catalog; using sample inventory.", error);
     return { listings: catalog, source: "sample" };
   }
 }
@@ -122,7 +123,8 @@ export async function getListingById(id: string): Promise<PcListing | null> {
       LIMIT 1
     `).bind(id, Date.now()).first<ListingRow>();
     return row ? fromRow(row) : null;
-  } catch {
+  } catch (error) {
+    console.error("Unable to load the requested live listing.", error);
     return null;
   }
 }

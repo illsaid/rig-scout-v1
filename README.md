@@ -14,6 +14,9 @@ Prebuilts.co is a spec-first search engine for prebuilt PCs. A shopper chooses t
 - Exact, close, and worth-considering result groups
 - Upgradeability badges for case, PSU, memory configuration, and cooling
 - Shareable build-brief URLs
+- Best Buy Products API adapter with code-only normalization
+- D1-backed listings, raw provenance snapshots, and ingestion run records
+- Daily catalog refresh with a clearly labeled sample fallback
 
 ## Product boundary
 
@@ -21,11 +24,10 @@ The matching engine is deterministic. AI belongs in retailer ingestion, where it
 
 ## Next implementation slice
 
-1. Add one retailer ingestion adapter and store normalized listings.
-2. Add extraction fixtures for messy product pages.
-3. Replace sample inventory with a daily catalog refresh.
-4. Add merchant-specific affiliate transformers and real program IDs.
-5. Record outbound clicks and user-reported specification errors.
+1. Configure the Best Buy API key when approval arrives and verify the first production refresh.
+2. Add merchant-specific affiliate transformers and real program IDs.
+3. Record outbound clicks and user-reported specification errors.
+4. Add saved-search email alerts after the live catalog is stable.
 
 ## Local development
 
