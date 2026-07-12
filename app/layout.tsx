@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://rigscout-pc-search.illseen.chatgpt.site";
+  "https://prebuilts.co";
 
-const title = "RigScout - Find the prebuilt with your parts";
+const title = "Prebuilts.co - Find the whole PC by the parts inside";
 const description =
-  "Search prebuilt computers by exact components and compare the closest deals across retailers.";
+  "Search prebuilt PCs by exact components, compare real tradeoffs, and find the closest current retailer listings.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -22,13 +22,13 @@ async function request(path = "/") {
   );
 }
 
-test("server-renders the RigScout product experience", async () => {
+test("server-renders the Prebuilts.co product experience", async () => {
   const response = await request();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>RigScout/);
+  assert.match(html, /<title>Prebuilts\.co/);
   assert.match(html, /Primary use/);
   assert.match(html, /Exact Matches/);
   assert.match(html, /Include listings with unclear secondary specs/);
