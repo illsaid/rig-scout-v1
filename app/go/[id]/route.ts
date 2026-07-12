@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { affiliateUrl } from "@/lib/affiliate";
+import { affiliateUrl, runtimeAffiliateIdentifiers } from "@/lib/affiliate";
 import { getListingById } from "@/lib/catalog-source";
+import { recordOutboundClick } from "@/lib/clicks";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
@@ -13,7 +14,18 @@ export async function GET(
     return NextResponse.json({ error: "Listing not found" }, { status: 404 });
   }
 
-  return NextResponse.redirect(
-    affiliateUrl(listing.canonicalUrl, listing.retailer),
+  const identifiers = await runtimeAffiliateIdentifiers();
+  const destinationUrl = affiliateUrl(
+    listing.canonicalUrl,
+    listing.retailer,
+    identifiers,
   );
+  await recordOutboundClick({
+    listingId: listing.id,
+    retailer: listing.retailer,
+    destinationUrl,
+    referrer: request.headers.get("referer"),
+  });
+
+  return NextResponse.redirect(destinationUrl);
 }

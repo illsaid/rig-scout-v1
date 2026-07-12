@@ -1,6 +1,7 @@
 export const metadata = {
   title: "About - Prebuilts.co",
   description: "How Prebuilts.co compares prebuilt PCs and explains the tradeoffs.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

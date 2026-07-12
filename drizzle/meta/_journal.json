@@ -8,6 +8,13 @@
       "when": 1783809958273,
       "tag": "0000_majestic_winter_soldier",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1783895783818,
+      "tag": "0001_hesitant_rawhide_kid",
+      "breakpoints": true
     }
   ]
 }

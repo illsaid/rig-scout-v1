@@ -1,6 +1,7 @@
 export const metadata = {
   title: "Affiliate Disclosure - Prebuilts.co",
   description: "How retailer links and commissions work on Prebuilts.co.",
+  alternates: { canonical: "/disclosure" },
 };
 
 export default function DisclosurePage() {

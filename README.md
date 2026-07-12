@@ -17,6 +17,9 @@ Prebuilts.co is a spec-first search engine for prebuilt PCs. A shopper chooses t
 - Best Buy Products API adapter with code-only normalization
 - D1-backed listings, raw provenance snapshots, and ingestion run records
 - Daily catalog refresh with a clearly labeled sample fallback
+- Core-page sitemap, canonical URLs, and noindex handling for shared search permutations
+- Privacy-conscious outbound click logging and merchant-specific affiliate transforms
+- Public ingestion health reporting for operational verification
 
 ## Product boundary
 

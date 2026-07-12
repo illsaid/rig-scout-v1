@@ -98,3 +98,15 @@ export const ingestionRuns = sqliteTable("ingestion_runs", {
 }, (table) => [
   index("ingestion_runs_retailer_started_idx").on(table.retailer, table.startedAt),
 ]);
+
+export const outboundClicks = sqliteTable("outbound_clicks", {
+  id: text("id").primaryKey(),
+  listingId: text("listing_id").notNull(),
+  retailer: text("retailer").notNull(),
+  destinationHost: text("destination_host").notNull(),
+  referrerHost: text("referrer_host"),
+  clickedAt: integer("clicked_at", { mode: "timestamp_ms" }).notNull(),
+}, (table) => [
+  index("outbound_clicks_listing_clicked_idx").on(table.listingId, table.clickedAt),
+  index("outbound_clicks_retailer_clicked_idx").on(table.retailer, table.clickedAt),
+]);
