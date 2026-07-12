@@ -35,6 +35,8 @@ export type PcListing = {
   price: number;
   wasPrice?: number;
   canonicalUrl: string;
+  imageUrl?: string | null;
+  imageAttribution?: string | null;
   confidence: ConfidenceMap;
 };
 
