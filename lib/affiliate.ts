@@ -19,7 +19,7 @@ export function affiliateUrl(canonicalUrl: string, retailer: string): string {
     }
   }
 
-  url.searchParams.set("utm_source", "rigscout");
+  url.searchParams.set("utm_source", "prebuilts.co");
   url.searchParams.set("utm_medium", "affiliate");
   url.searchParams.set(
     "utm_campaign",

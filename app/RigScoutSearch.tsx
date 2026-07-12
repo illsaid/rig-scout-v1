@@ -86,13 +86,14 @@ export default function RigScoutSearch({
   return (
     <main>
       <nav className="nav shell" aria-label="Primary navigation">
-        <a className="brand" href="#top" aria-label="RigScout home">
-          <span className="brand-mark">R</span>
-          <span>RigScout</span>
+        <a className="brand" href="#top" aria-label="Prebuilts.co home">
+          <span className="brand-mark">P</span>
+          <span>Prebuilts.co</span>
         </a>
         <div className="nav-links">
           <a href="#how-it-works">How it works</a>
           <a href="#results">{inventorySource === "live" ? "Live deals" : "Sample deals"}</a>
+          <a href="/about">About</a>
         </div>
         <button className="ghost-button" type="button" onClick={shareSearch}>
           {copied ? "Link copied" : "Share this brief"}
@@ -211,7 +212,7 @@ export default function RigScoutSearch({
       <section
         className="trust-strip shell"
         id="how-it-works"
-        aria-label="How RigScout works"
+        aria-label="How Prebuilts.co works"
       >
         <div>
           <strong>01</strong>
@@ -265,11 +266,19 @@ export default function RigScoutSearch({
         </div>
 
         <p className="affiliate-note">
-          RigScout may earn a commission when you purchase through our links.
+          Prebuilts.co may earn a commission when you purchase through eligible links.
           This does not affect your price or result ranking. Always verify final
           specifications, price, and availability with the retailer.
         </p>
       </section>
+      <footer className="site-footer shell">
+        <span>Prebuilts.co</span>
+        <nav aria-label="Site information">
+          <a href="/about">About</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/disclosure">Disclosure</a>
+        </nav>
+      </footer>
     </main>
   );
 }

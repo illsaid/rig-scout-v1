@@ -1,6 +1,6 @@
-# RigScout
+# Prebuilts.co
 
-RigScout is a spec-first search engine for prebuilt PCs. A shopper chooses the components and minimum specifications they want; RigScout returns the closest systems across retailers and sends qualified traffic through disclosed affiliate links.
+Prebuilts.co is a spec-first search engine for prebuilt PCs. A shopper chooses the components and minimum specifications they want; Prebuilts.co returns the closest systems across retailers and sends qualified traffic through disclosed affiliate links.
 
 ## Current prototype
 
