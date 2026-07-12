@@ -6,7 +6,7 @@ export const metadata = {
 export default function PrivacyPage() {
   return (
     <main className="info-page shell">
-      <a className="info-brand" href="/">Prebuilts.co</a>
+      <Link className="info-brand" href="/">Prebuilts.co</Link>
       <p className="step-label">PRIVACY</p>
       <h1>A small product with a small data footprint.</h1>
       <p className="info-lead">
@@ -39,3 +39,4 @@ export default function PrivacyPage() {
     </main>
   );
 }
+import Link from "next/link";

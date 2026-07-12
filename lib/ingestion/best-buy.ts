@@ -156,3 +156,11 @@ export function normalizeBestBuyProduct(
     expiresAt: expiresAtFor(fetchedAt),
   };
 }
+
+export function isUsableBestBuyListing(listing: NormalizedRetailerListing) {
+  const hasValidPrice = Number.isFinite(listing.price) && listing.price > 0;
+  const hasIdentifiableCoreHardware =
+    listing.cpu !== "Unknown" || listing.gpu !== "Unknown";
+
+  return hasValidPrice && hasIdentifiableCoreHardware;
+}

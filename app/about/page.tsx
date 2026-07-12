@@ -6,7 +6,7 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <main className="info-page shell">
-      <a className="info-brand" href="/">Prebuilts.co</a>
+      <Link className="info-brand" href="/">Prebuilts.co</Link>
       <p className="step-label">ABOUT</p>
       <h1>Find the whole PC by the parts inside.</h1>
       <p className="info-lead">
@@ -38,7 +38,8 @@ export default function AboutPage() {
           change before checkout, so the retailer page remains the final source.
         </p>
       </section>
-      <a className="primary-button info-cta" href="/">Search prebuilt PCs</a>
+      <Link className="primary-button info-cta" href="/">Search prebuilt PCs</Link>
     </main>
   );
 }
+import Link from "next/link";
