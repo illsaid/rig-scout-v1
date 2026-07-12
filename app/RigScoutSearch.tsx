@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { catalog } from "@/lib/catalog";
+import type { PcListing } from "@/lib/catalog";
 import {
   rankListings,
   type RankedListing,
@@ -34,16 +34,20 @@ const groupDetails: Record<ResultTier, { title: string; copy: string }> = {
 
 export default function RigScoutSearch({
   initialCriteria,
+  initialCatalog,
+  inventorySource,
 }: {
   initialCriteria: SearchCriteria;
+  initialCatalog: PcListing[];
+  inventorySource: "live" | "sample";
 }) {
   const [criteria, setCriteria] = useState(initialCriteria);
   const [submitted, setSubmitted] = useState(initialCriteria);
   const [copied, setCopied] = useState(false);
 
   const results = useMemo(
-    () => rankListings(catalog, submitted),
-    [submitted],
+    () => rankListings(initialCatalog, submitted),
+    [initialCatalog, submitted],
   );
 
   const grouped = useMemo(
@@ -88,7 +92,7 @@ export default function RigScoutSearch({
         </a>
         <div className="nav-links">
           <a href="#how-it-works">How it works</a>
-          <a href="#results">Sample deals</a>
+          <a href="#results">{inventorySource === "live" ? "Live deals" : "Sample deals"}</a>
         </div>
         <button className="ghost-button" type="button" onClick={shareSearch}>
           {copied ? "Link copied" : "Share this brief"}
@@ -116,7 +120,9 @@ export default function RigScoutSearch({
               <p className="step-label">YOUR BUILD BRIEF</p>
               <h2>What belongs in the box?</h2>
             </div>
-            <span className="demo-badge">Prototype / sample inventory</span>
+            <span className="demo-badge">
+              {inventorySource === "live" ? "Fresh retailer inventory" : "Prototype / sample inventory"}
+            </span>
           </div>
 
           <div className="field-grid">
@@ -233,10 +239,15 @@ export default function RigScoutSearch({
             <p className="step-label">
               MATCHED FOR {submitted.useCase.toUpperCase()}
             </p>
-            <h2>{results.length} sample systems worth a look</h2>
+            <h2>
+              {results.length} {inventorySource === "live" ? "current" : "sample"} systems worth a look
+            </h2>
           </div>
           <div className="result-meta">
-            <span className="pulse" /> Demo inventory / not live retailer data
+            <span className="pulse" />{" "}
+            {inventorySource === "live"
+              ? "Retailer data refreshed daily"
+              : "Demo inventory / not live retailer data"}
           </div>
         </div>
 
@@ -398,8 +409,14 @@ function ResultCard({
     .join("; ");
 
   return (
-    <article className="result-card">
+    <article className={listing.imageUrl ? "result-card with-image" : "result-card"}>
       <div className="rank">{String(rank).padStart(2, "0")}</div>
+      {listing.imageUrl && (
+        <div className="product-image">
+          <img src={listing.imageUrl} alt="" loading="lazy" />
+          {listing.imageAttribution && <small>Image: {listing.imageAttribution}</small>}
+        </div>
+      )}
       <div className="result-main">
         <div className="result-topline">
           <span className={`match-pill ${result.tier}`}>{score}% match</span>
@@ -487,7 +504,11 @@ function ResultCard({
         >
           View at {listing.retailer} <span>^</span>
         </a>
-        <small>Affiliate link / sample destination</small>
+        <small>
+          {listing.id.startsWith("demo-")
+            ? "Sample destination"
+            : "Retailer link / verify final price"}
+        </small>
       </div>
     </article>
   );

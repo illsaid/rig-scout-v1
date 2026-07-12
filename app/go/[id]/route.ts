@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { catalog } from "@/lib/catalog";
 import { affiliateUrl } from "@/lib/affiliate";
+import { getListingById } from "@/lib/catalog-source";
 
 export async function GET(
   _request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
-  const listing = catalog.find((item) => item.id === id);
+  const listing = await getListingById(id);
 
   if (!listing) {
     return NextResponse.json({ error: "Listing not found" }, { status: 404 });

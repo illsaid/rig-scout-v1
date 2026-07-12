@@ -68,6 +68,10 @@ h1 span { color: #788078; font-weight: 500; }
 .result-meta { display: flex; gap: 10px; align-items: center; color: #687069; font-size: 12px; }
 .results-list { display: flex; flex-direction: column; gap: 12px; }
 .result-card { display: grid; grid-template-columns: 55px 1fr 190px; background: white; border: 1px solid #d9ded8; border-radius: 14px; padding: 22px; transition: transform .2s, box-shadow .2s; }
+.result-card.with-image { grid-template-columns: 55px 120px 1fr 190px; }
+.product-image { align-self: start; padding-right: 20px; text-align: center; }
+.product-image img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.product-image small { display: block; margin-top: 7px; color: var(--muted); font-size: 10px; }
 .result-card:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(24, 35, 27, .07); }
 .rank { color: #a0a7a1; font: 12px var(--font-geist-mono); padding-top: 5px; }
 .result-main { padding-right: 25px; }
@@ -112,7 +116,8 @@ h1 span { color: #788078; font-weight: 500; }
 
 @media (max-width: 900px) {
   .field-grid { grid-template-columns: repeat(2, 1fr); }
-  .result-card { grid-template-columns: 36px 1fr; }
+  .result-card, .result-card.with-image { grid-template-columns: 36px 110px 1fr; }
+  .price-block { grid-column: 2 / -1; }
   .price-block { grid-column: 2; border-left: 0; border-top: 1px solid #e5e9e4; margin-top: 18px; padding: 18px 0 0; align-items: flex-start; }
   .deal-button { width: auto; min-width: 190px; }
   .spec-row { grid-template-columns: repeat(3, 1fr); row-gap: 15px; }
@@ -135,7 +140,8 @@ h1 span { color: #788078; font-weight: 500; }
   .trust-strip { grid-template-columns: 1fr; }
   .trust-strip > div { border-right: 0; border-bottom: 1px solid var(--line); }
   .results-heading { align-items: flex-start; flex-direction: column; gap: 14px; }
-  .result-card { grid-template-columns: 28px 1fr; padding: 17px; }
+  .result-card, .result-card.with-image { grid-template-columns: 28px 76px 1fr; padding: 17px; }
+  .product-image { padding-right: 12px; }
   .result-main { padding: 0; }
   .spec-row { grid-template-columns: repeat(2, 1fr); }
 }
