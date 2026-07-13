@@ -110,3 +110,36 @@ export const outboundClicks = sqliteTable("outbound_clicks", {
   index("outbound_clicks_listing_clicked_idx").on(table.listingId, table.clickedAt),
   index("outbound_clicks_retailer_clicked_idx").on(table.retailer, table.clickedAt),
 ]);
+
+export const specReports = sqliteTable("spec_reports", {
+  id: text("id").primaryKey(),
+  listingId: text("listing_id").notNull(),
+  retailer: text("retailer").notNull(),
+  listingName: text("listing_name").notNull(),
+  field: text("field", {
+    enum: [
+      "cpu",
+      "gpu",
+      "memory",
+      "storage",
+      "motherboard",
+      "case",
+      "psu",
+      "ram-config",
+      "cooling",
+      "price-availability",
+      "other",
+    ],
+  }).notNull(),
+  displayedValue: text("displayed_value"),
+  suggestedValue: text("suggested_value"),
+  details: text("details"),
+  status: text("status", {
+    enum: ["pending", "accepted", "rejected"],
+  }).notNull().default("pending"),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  reviewedAt: integer("reviewed_at", { mode: "timestamp_ms" }),
+}, (table) => [
+  index("spec_reports_listing_created_idx").on(table.listingId, table.createdAt),
+  index("spec_reports_status_created_idx").on(table.status, table.createdAt),
+]);

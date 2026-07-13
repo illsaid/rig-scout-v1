@@ -16,6 +16,10 @@ import {
   USE_CASES,
   criteriaToParams,
 } from "@/lib/search-criteria";
+import {
+  SPEC_REPORT_FIELDS,
+  type SpecReportField,
+} from "@/lib/spec-report-fields";
 
 const groupDetails: Record<ResultTier, { title: string; copy: string }> = {
   exact: {
@@ -519,7 +523,154 @@ function ResultCard({
             : "Retailer link / verify final price"}
         </small>
       </div>
+      <SpecReport listing={listing} />
     </article>
+  );
+}
+
+function SpecReport({ listing }: { listing: PcListing }) {
+  const [open, setOpen] = useState(false);
+  const [field, setField] = useState<SpecReportField>("cpu");
+  const [suggestedValue, setSuggestedValue] = useState("");
+  const [details, setDetails] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
+  const [message, setMessage] = useState("");
+  const formId = `spec-report-${listing.id}`;
+
+  async function submitReport(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!suggestedValue.trim() && !details.trim()) {
+      setStatus("error");
+      setMessage("Add a correction or a short note.");
+      return;
+    }
+
+    setStatus("submitting");
+    setMessage("");
+    const formData = new FormData(event.currentTarget);
+
+    try {
+      const response = await fetch("/api/reports/specs", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          listingId: listing.id,
+          field,
+          suggestedValue,
+          details,
+          website: formData.get("website"),
+        }),
+      });
+      const body = await response.json().catch(() => ({})) as {
+        error?: string;
+      };
+      if (!response.ok) {
+        throw new Error(body.error ?? "Unable to send the report.");
+      }
+
+      setStatus("success");
+      setMessage("Thanks. We will check this against the retailer source.");
+      setSuggestedValue("");
+      setDetails("");
+    } catch (error) {
+      setStatus("error");
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to send the report.",
+      );
+    }
+  }
+
+  function toggleReport() {
+    setOpen((current) => !current);
+    if (status !== "submitting") {
+      setStatus("idle");
+      setMessage("");
+    }
+  }
+
+  return (
+    <div className="spec-report">
+      <button
+        className="report-toggle"
+        type="button"
+        aria-expanded={open}
+        aria-controls={formId}
+        onClick={toggleReport}
+      >
+        {open ? "Close report" : "Report incorrect specs"}
+      </button>
+      {open && (
+        <form id={formId} className="report-form" onSubmit={submitReport}>
+          <div className="report-copy">
+            <b>What looks wrong?</b>
+            <span>
+              Reports are reviewed against the retailer listing before data is changed.
+            </span>
+          </div>
+          <div className="report-grid">
+            <label>
+              <span>Specification</span>
+              <select
+                value={field}
+                onChange={(event) =>
+                  setField(event.target.value as SpecReportField)
+                }
+              >
+                {SPEC_REPORT_FIELDS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Suggested correction</span>
+              <input
+                value={suggestedValue}
+                maxLength={160}
+                placeholder="Example: RTX 5070 Ti, not RTX 5080"
+                onChange={(event) => setSuggestedValue(event.target.value)}
+              />
+            </label>
+            <label className="report-note">
+              <span>Optional note</span>
+              <textarea
+                value={details}
+                maxLength={600}
+                rows={3}
+                placeholder="Where did you find the conflicting information? Do not include personal information."
+                onChange={(event) => setDetails(event.target.value)}
+              />
+            </label>
+          </div>
+          <label className="report-honeypot" aria-hidden="true">
+            Website
+            <input name="website" tabIndex={-1} autoComplete="off" />
+          </label>
+          <div className="report-actions">
+            <button
+              className="report-submit"
+              type="submit"
+              disabled={status === "submitting"}
+            >
+              {status === "submitting" ? "Sending..." : "Send report"}
+            </button>
+            {message && (
+              <span
+                className={`report-status ${status}`}
+                role={status === "error" ? "alert" : "status"}
+              >
+                {message}
+              </span>
+            )}
+          </div>
+        </form>
+      )}
+    </div>
   );
 }
 

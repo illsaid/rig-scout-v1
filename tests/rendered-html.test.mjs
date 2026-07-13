@@ -1,15 +1,16 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-async function request(path = "/") {
+async function request(path = "/", init = {}) {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
+  const headers = new Headers(init.headers);
+  if (!headers.has("accept")) headers.set("accept", "text/html");
+
   return worker.fetch(
-    new Request(`http://localhost${path}`, {
-      headers: { accept: "text/html" },
-    }),
+    new Request(`http://localhost${path}`, { ...init, headers }),
     {
       ASSETS: {
         fetch: async () => new Response("Not found", { status: 404 }),
@@ -33,6 +34,7 @@ test("server-renders the Prebuilts.co product experience", async () => {
   assert.match(html, /Exact Matches/);
   assert.match(html, /Include listings with unclear secondary specs/);
   assert.match(html, /Hide matches below 60%/);
+  assert.match(html, /Report incorrect specs/);
   assert.doesNotMatch(
     html,
     /codex-preview|Your site is taking shape|react-loading-skeleton/i,
@@ -83,6 +85,30 @@ test("exposes non-indexable ingestion health without requiring the retailer key"
   assert.equal(response.status, 200);
   assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow");
   assert.deepEqual(await response.json(), { status: "database-unavailable" });
+});
+
+test("validates incorrect-spec report submissions", async () => {
+  const invalidResponse = await request("/api/reports/specs", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ listingId: "demo-002", field: "gpu" }),
+  });
+  assert.equal(invalidResponse.status, 400);
+  assert.equal(invalidResponse.headers.get("x-robots-tag"), "noindex, nofollow");
+
+  const unavailableResponse = await request("/api/reports/specs", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      listingId: "demo-002",
+      field: "gpu",
+      suggestedValue: "RTX 5070 Ti",
+    }),
+  });
+  assert.equal(unavailableResponse.status, 503);
+  assert.deepEqual(await unavailableResponse.json(), {
+    error: "Reporting is temporarily unavailable.",
+  });
 });
 
 test("returns 404 for an unknown outbound listing", async () => {

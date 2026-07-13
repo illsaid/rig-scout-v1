@@ -12,6 +12,7 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-geist-sans), Arial, sans-serif; }
 button, input, select { font: inherit; }
+textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 .shell { width: min(1180px, calc(100% - 40px)); margin-inline: auto; }
 
@@ -112,6 +113,26 @@ h1 span { color: #788078; font-weight: 500; }
 .savings { color: #2e7b4a; font-size: 11px; font-weight: 700; }
 .deal-button { width: 100%; padding: 11px 12px; margin-top: 19px; font-size: 12px; }
 .price-block small { margin-top: 7px; color: #969d97; font-size: 9px; }
+.spec-report { grid-column: 2 / -1; margin-top: 18px; padding-top: 13px; border-top: 1px solid #edf0ec; }
+.report-toggle { border: 0; background: transparent; color: #687069; padding: 0; cursor: pointer; font-size: 10px; font-weight: 680; text-decoration: underline; text-underline-offset: 3px; }
+.report-toggle:hover { color: var(--ink); }
+.report-form { margin-top: 14px; padding: 16px; border: 1px solid #dde2dc; border-radius: 10px; background: #fafbf9; }
+.report-copy { display: flex; flex-direction: column; gap: 4px; margin-bottom: 13px; }
+.report-copy b { font-size: 13px; }
+.report-copy span { color: var(--muted); font-size: 10px; }
+.report-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 12px; }
+.report-grid label { display: flex; flex-direction: column; gap: 6px; }
+.report-grid label > span { color: #747c75; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.report-grid select, .report-grid input, .report-grid textarea { width: 100%; border: 1px solid #d5dad4; border-radius: 7px; background: white; color: var(--ink); padding: 9px 10px; outline: none; font-size: 12px; }
+.report-grid select:focus, .report-grid input:focus, .report-grid textarea:focus { border-color: #5c795f; box-shadow: 0 0 0 3px #e4eee1; }
+.report-note { grid-column: 1 / -1; }
+.report-grid textarea { resize: vertical; min-height: 70px; }
+.report-actions { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+.report-submit { border: 0; border-radius: 7px; background: var(--green); color: white; padding: 9px 12px; cursor: pointer; font-size: 11px; font-weight: 680; }
+.report-submit:disabled { cursor: wait; opacity: .65; }
+.report-status { color: #3b744d; font-size: 10px; }
+.report-status.error { color: #9a3e32; }
+.report-honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .affiliate-note { max-width: 750px; margin: 24px auto 0; text-align: center; color: #858c86; font-size: 10px; line-height: 1.5; }
 .site-footer { display: flex; justify-content: space-between; gap: 24px; padding-top: 28px; padding-bottom: 38px; color: var(--muted); font-size: 12px; }
 .site-footer nav { display: flex; gap: 20px; }
@@ -157,6 +178,10 @@ h1 span { color: #788078; font-weight: 500; }
   .product-image { padding-right: 12px; }
   .result-main { padding: 0; }
   .spec-row { grid-template-columns: repeat(2, 1fr); }
+  .spec-report { grid-column: 1 / -1; }
+  .report-grid { grid-template-columns: 1fr; }
+  .report-note { grid-column: auto; }
+  .report-actions { align-items: flex-start; flex-direction: column; }
   .site-footer { align-items: flex-start; flex-direction: column; }
   .info-page { padding-top: 36px; }
   .info-brand { margin-bottom: 54px; }
