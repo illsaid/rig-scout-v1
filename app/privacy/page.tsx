@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const metadata = {
   title: "Privacy - Prebuilts.co",
   description: "Privacy information for Prebuilts.co.",
@@ -22,6 +24,16 @@ export default function PrivacyPage() {
         </p>
       </section>
       <section>
+        <h2>Specification reports</h2>
+        <p>
+          If you report an incorrect specification, Prebuilts.co stores the
+          listing, retailer, disputed field, value shown at the time, your
+          optional correction or note, report status, and timestamp. Reports do
+          not include an account, email address, or stored IP address. Please do
+          not put personal information in a report.
+        </p>
+      </section>
+      <section>
         <h2>Retailer links</h2>
         <p>
           When you follow a retailer link, that retailer receives the request
@@ -41,8 +53,7 @@ export default function PrivacyPage() {
           notice will be updated before those features collect personal data.
         </p>
       </section>
-      <p className="info-updated">Last updated July 12, 2026.</p>
+      <p className="info-updated">Last updated July 13, 2026.</p>
     </main>
   );
 }
-import Link from "next/link";

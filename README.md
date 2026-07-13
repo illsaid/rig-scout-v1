@@ -20,6 +20,7 @@ Prebuilts.co is a spec-first search engine for prebuilt PCs. A shopper chooses t
 - Core-page sitemap, canonical URLs, and noindex handling for shared search permutations
 - Privacy-conscious outbound click logging and merchant-specific affiliate transforms
 - Public ingestion health reporting for operational verification
+- Incorrect-spec reporting with privacy-conscious D1 storage and review status
 
 ## Product boundary
 
@@ -29,7 +30,7 @@ The matching engine is deterministic. AI belongs in retailer ingestion, where it
 
 1. Configure the Best Buy API key when approval arrives and verify the first production refresh.
 2. Add merchant-specific affiliate transformers and real program IDs.
-3. Record outbound clicks and user-reported specification errors.
+3. Review incoming specification reports against retailer snapshots.
 4. Add saved-search email alerts after the live catalog is stable.
 
 ## Local development

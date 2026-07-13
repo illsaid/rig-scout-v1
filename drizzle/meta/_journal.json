@@ -15,6 +15,13 @@
       "when": 1783895783818,
       "tag": "0001_hesitant_rawhide_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1783960929469,
+      "tag": "0002_acoustic_senator_kelly",
+      "breakpoints": true
     }
   ]
 }
